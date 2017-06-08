@@ -20,28 +20,34 @@ try {
         ]
     );
     
+    $time = mktime(date('H'), date('i'), 0);
     $ticker = PoloniexAPIPublic::returnTicker();
     
     $values = [];
     foreach ($ticker as $pair => $market) {
-        $values[] = "('" . $pair . "', " . $market['last'] . ")";
+        $values[] = "('" . $pair . "', " . $market['last'] . ", " . $time . ")";
         
     }
     
-    $pdo->exec('INSERT INTO `ticker` (`pair`, `value`) VALUES ' . implode(', ', $values));
+    $pdo->exec('INSERT INTO `ticker` (`pair`, `value`, `ts`) VALUES ' . implode(', ', $values));
         
     $messages = [];
     
     $rows = $pdo->query(
-        'SELECT `pair`, (MAX(`value`) - MIN(`value`)) / MIN(`value`) * 100 AS `growth`
-        FROM `ticker`
-        WHERE `ts` > UNIX_TIMESTAMP() - 120
-        GROUP BY `pair`
-        HAVING `growth` > 10'
+        'SELECT
+            curr.`pair`,
+            prev.`value` AS `prev_value`, 
+            curr.`value` AS `curr_value`, 
+            (curr.`value` - prev.`value`) / prev.`value` * 100 AS `growth`
+        FROM 
+            (SELECT * FROM `ticker` WHERE `ts` = ' . ($time - 60) . ') AS prev
+            INNER JOIN (SELECT * FROM `ticker` WHERE `ts` = ' . $time . ') AS curr ON prev.`pair` = curr.`pair` 
+        WHERE 
+            `growth` > 10'
     );
     
     while ($row = $rows->fetch()) {
-        $messages[] = $row['pair'] . ' growths up to on ' . $row['growth'] . '% at last 2 mins' . PHP_EOL;
+        $messages[] = $row['pair'] . ' growths up to on ' . $row['growth'] . '%  from ' . $row['prev_value'] . ' to ' . $row['curr_value'] . ' at last 2 mins' . PHP_EOL;
     }
     
     if (count($messages)) {
