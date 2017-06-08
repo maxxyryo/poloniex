@@ -1,3 +1,5 @@
 CREATE DATABASE `poloniex`;
 
+USE `poloniex`;
+
 CREATE TABLE `ticker` (`pair` VARCHAR(25) NOT NULL, `ts` TIMESTAMP, `value` DECIMAL(16, 8) UNSIGNED NOT NULL, PRIMARY KEY(`pair`, `ts`)) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;

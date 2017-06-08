@@ -41,7 +41,7 @@ try {
     );
     
     while ($row = $rows->fetch()) {
-        $messages[] = $row['pair'] . ' growths up to on ' . $row['growth'] . ' at last 2 mins' . PHP_EOL;
+        $messages[] = $row['pair'] . ' growths up to on ' . $row['growth'] . '% at last 2 mins' . PHP_EOL;
     }
     
     if (count($messages)) {
