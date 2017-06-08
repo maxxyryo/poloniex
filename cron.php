@@ -64,35 +64,3 @@ try {
 } catch (\Exception $e) {
     echo $e->getMessage() . PHP_EOL;
 }
-
-/**/
-
-
-/*$ticker = PoloniexAPIPublic::returnTicker();
-var_dump($ticker);
-
-
-define('BOT_TOKEN', 'XXXXXXXXX:YYYYYYY-YYYYYYYYYYYYYYYYY_YY');
-
-define('A_USER_CHAT_ID', 'XXXXXXXXX');
-
-define('A_GROUP_CHAT_ID', 'XXXXXXXXX');
-
-define('A_FILE_ID', 'XXXXXXXXXXXXXXXXXXXXXXXX');
-
-define('A_USER_ID', 'XXXXXXXX');
-
-$tgLog = new TgLog('359802114:AAHfUJfRPqYDAo5xCUQJcFHAUPv4FZuzg9M');
-$sendMessage = new SendMessage();
-$sendMessage->chat_id = A_GROUP_CHAT_ID;
-$sendMessage->text = 'And this is an hello the the group... also from a getMessage file';
-try {
-    $tgLog->performApiRequest($sendMessage);
-    printf('Message "%s" sent!<br/>%s', $sendMessage->text, PHP_EOL);
-} catch (ClientException $e) {
-    echo 'Error detected trying to send message to group: <pre>';
-    print_r((string)$e->getResponse()->getBody());
-    echo '</pre>';
-    die();
-}
-]*/
