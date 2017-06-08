@@ -43,7 +43,7 @@ try {
     while ($row = $rows->fetch()) {
         $messages[] = $row['pair'] . ' growths up to on ' . $row['growth'] . '% at last 2 mins' . PHP_EOL;
     }
-    $messages[] = 'test';
+    
     if (count($messages)) {
         $tgLog = new TgLog(TELEGRAM_BOT_TOKEN);
         $getUpdates = new GetUpdates();
@@ -60,8 +60,6 @@ try {
             }
         }
     }
-    
-    echo 111;
     
 } catch (\Exception $e) {
     echo $e->getMessage() . PHP_EOL;
