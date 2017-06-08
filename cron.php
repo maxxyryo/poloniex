@@ -42,7 +42,7 @@ try {
         FROM 
             (SELECT * FROM `ticker` WHERE `ts` = ' . ($time - 60) . ') AS prev
             INNER JOIN (SELECT * FROM `ticker` WHERE `ts` = ' . $time . ') AS curr ON prev.`pair` = curr.`pair` 
-        WHERE 
+        HAVING 
             `growth` > 10'
     );
     
