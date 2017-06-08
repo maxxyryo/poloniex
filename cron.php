@@ -26,7 +26,6 @@ try {
     $values = [];
     foreach ($ticker as $pair => $market) {
         $values[] = "('" . $pair . "', " . $market['last'] . ", " . $time . ")";
-        
     }
     
     $pdo->exec('INSERT INTO `ticker` (`pair`, `value`, `ts`) VALUES ' . implode(', ', $values));
@@ -40,7 +39,7 @@ try {
             curr.`value` AS `curr_value`, 
             (curr.`value` - prev.`value`) / prev.`value` * 100 AS `growth`
         FROM 
-            (SELECT * FROM `ticker` WHERE `ts` = ' . ($time - 60) . ') AS prev
+            (SELECT * FROM `ticker` WHERE `ts` = ' . ($time - 120) . ') AS prev
             INNER JOIN (SELECT * FROM `ticker` WHERE `ts` = ' . $time . ') AS curr ON prev.`pair` = curr.`pair` 
         HAVING 
             `growth` > 10'
