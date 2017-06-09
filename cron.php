@@ -39,7 +39,7 @@ try {
             curr.`value` AS `curr_value`, 
             (curr.`value` - prev.`value`) / prev.`value` * 100 AS `growth`
         FROM 
-            (SELECT * FROM `ticker` WHERE `ts` = ' . ($time - 120) . ') AS prev
+            (SELECT * FROM `ticker` WHERE `ts` = ' . ($time - 300) . ') AS prev
             INNER JOIN (SELECT * FROM `ticker` WHERE `ts` = ' . $time . ') AS curr ON prev.`pair` = curr.`pair` 
         HAVING 
             `growth` > 10'
