@@ -31,23 +31,25 @@ try {
     $pdo->exec('INSERT INTO `ticker` (`pair`, `value`, `ts`) VALUES ' . implode(', ', $values));
         
     $messages = [];
-    
-    $rows = $pdo->query(
-        'SELECT
+    foreach (array(300, 600, 1800) as $interval) {
+        $rows = $pdo->query(
+            'SELECT
             curr.`pair`,
             prev.`value` AS `prev_value`, 
             curr.`value` AS `curr_value`, 
             (curr.`value` - prev.`value`) / prev.`value` * 100 AS `growth`
         FROM 
-            (SELECT * FROM `ticker` WHERE `ts` = ' . ($time - 300) . ') AS prev
+            (SELECT * FROM `ticker` WHERE `ts` = ' . ($time - $interval) . ') AS prev
             INNER JOIN (SELECT * FROM `ticker` WHERE `ts` = ' . $time . ') AS curr ON prev.`pair` = curr.`pair` 
         HAVING 
             `growth` > 10'
-    );
+        );
     
-    while ($row = $rows->fetch()) {
-        $messages[] = $row['pair'] . ' growths up to on ' . $row['growth'] . '%  from ' . $row['prev_value'] . ' to ' . $row['curr_value'] . ' at last 2 mins' . PHP_EOL;
+        while ($row = $rows->fetch()) {
+            $messages[] = $row['pair'] . ' growths up to on +' . $row['growth'] . '%  from ' . $row['prev_value'] . ' to ' . $row['curr_value'] . ' at last ' . ($interval / 60) . ' mins' . PHP_EOL;
+        }
     }
+    
     
     if (count($messages)) {
         $tgLog = new TgLog(TELEGRAM_BOT_TOKEN);
